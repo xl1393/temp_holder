@@ -5,7 +5,7 @@ Account.enable_unaudited_hdwallet_features()
 
 # 打开文件用于写入
 with open("accounts.txt", "w") as f:
-    for _ in range(20):
+    for _ in range(24):
         acct = Account.create()
         private_key = acct.key.hex()  # 去掉开头的 '0x'
         f.write(private_key + "\n")
