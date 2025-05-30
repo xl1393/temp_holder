@@ -104,7 +104,7 @@ class PharosBot:
                 "type": "function"
             }
         ]
-        self.ref_code = "LGwM5n8aXBhbjUlU" 
+        self.ref_code ="" # "LGwM5n8aXBhbjUlU" 
         self.proxies = []
         self.proxy_idx = 0
         self.account_proxy_map = {}
@@ -475,22 +475,7 @@ class PharosBot:
         """获取用户输入"""
         daily_transfers = 0
         daily_swaps = 0
-        while True:
-            try:
-                daily_transfers = int(input("请输入每天转账次数: "))
-                if daily_transfers >= 0:
-                    break
-                self.log("请输入非负整数", Fore.RED)
-            except ValueError:
-                self.log("请输入有效数字", Fore.RED)
-        while True:
-            try:
-                daily_swaps = int(input("请输入每天交换次数: "))
-                if daily_swaps >= 0:
-                    break
-                self.log("请输入非负整数", Fore.RED)
-            except ValueError:
-                self.log("请输入有效数字", Fore.RED)
+
 
         print("请选择代理设置:")
         print("1. 使用公共代理")
@@ -545,7 +530,7 @@ class PharosBot:
             return
         self.log("登录成功", Fore.GREEN)
 
-        operations = ["sign_in", "faucet", "transfer", "wrap", "unwrap", "swap"]
+        operations = ["sign_in"]
         random.shuffle(operations)
 
         for op in operations:
@@ -559,7 +544,7 @@ class PharosBot:
                     self.log("今日已签到", Fore.YELLOW)
                 else:
                     self.log("签到失败", Fore.RED)
-                await self.print_timer(random.randint(5, 60))
+                await self.print_timer(random.randint(10, 30))
 
             elif op == "faucet":
               
@@ -658,7 +643,7 @@ class PharosBot:
                         self.log(f"浏览器: {explorer}", Fore.WHITE)
                     else:
                         self.log("解包失败", Fore.RED)
-                await self.print_timer(random.randint(10, 60))
+                await self.print_timer(random.randint(1, 10))
 
             elif op == "swap":
                 # 交换 WPHRS ↔ USDC
@@ -696,7 +681,7 @@ class PharosBot:
                             self.log(f"浏览器: {explorer}", Fore.WHITE)
                         else:
                             self.log("交换失败", Fore.RED)
-                        await self.print_timer(random.randint(10, 60))
+                        await self.print_timer(random.randint(1, 10))
 
     async def process_accounts_concurrently(self, accounts, daily_transfers, daily_swaps, use_proxy, rotate_proxy, batch_size=1):
         """并发处理账户"""
@@ -710,19 +695,14 @@ class PharosBot:
             ]
             await asyncio.gather(*tasks, return_exceptions=True)
             self.log(f"完成批次 {i//batch_size + 1}/{(len(accounts) + batch_size - 1)//batch_size}", Fore.GREEN)
-            await asyncio.sleep(random.randint(1, 30) * 60)
+            await asyncio.sleep(random.randint(1, 10))
 
     async def main(self):
         """主函数"""
         self.clear_screen()
         self.welcome()
 
-       
         daily_transfers, daily_swaps, use_proxy, rotate_proxy = self.print_question()
-
-     
-        if use_proxy in [1, 2]:
-            await self.load_proxies(use_proxy)
 
       
         try:
@@ -734,15 +714,12 @@ class PharosBot:
             return
 
        
-        while True:
-            self.clear_screen()
-            self.welcome()
-            self.log(f"账户总数: {len(accounts)}", Fore.GREEN)
-            await self.process_accounts_concurrently(
-                accounts, daily_transfers, daily_swaps, use_proxy in [1, 2], rotate_proxy
-            )
-            self.log("所有账户处理完成，将在 24 小时后重新运行", Fore.GREEN)
-            await asyncio.sleep((24+random.randint(0,4)) * 3600)
+        self.clear_screen()
+        self.welcome()
+        self.log(f"账户总数: {len(accounts)}", Fore.GREEN)
+        await self.process_accounts_concurrently(
+            accounts, 1, 1 , use_proxy in [1, 2], rotate_proxy
+        )
 
 if __name__ == "__main__":
     try:

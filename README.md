@@ -33,10 +33,6 @@
 . **环境要求**：
    - Python 3.8 或更高版本。
    - 稳定的网络连接（建议使用代理以提升安全性）。
-. **克隆仓库**：
-```bash
-git clone https://github.com/ziqing888/pharos-daily.git
-```
 ```bash
 cd pharos-daily
 ```
@@ -51,6 +47,12 @@ cd pharos-daily
 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
 abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
 ```
+如果有推特账号，创建Xtoken.txt，每行一个推特token，例如
+```bash
+ba37425329bc804daad6bb56a1cbbb4a086c42be
+```
+推特token的获取请参考 https://ludamao.com/
+
 如果使用私有代理，创建 proxies.txt，每行一个代理地址，例如：
 ```bash
 http://127.0.0.1:8080
@@ -58,7 +60,16 @@ socks5://127.0.0.1:1080
 ```
 ## 使用指南
 运行脚本：
-执行以下命令：
+**如果已经手动绑定推特，执行以下命令：**
+```bash
+python3 bot.py
+```
+**如果有推特token，执行一次初始化，注意仅需要执行一次：**
+```bash
+python sign_wallet.py
+python bind_walletXtwitter.py
+```
+**之后再执行**
 ```bash
 python3 bot.py
 ```
